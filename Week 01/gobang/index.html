@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --cell-size: 30px;
+    }
+
+    div {
+        width: 1000px;
+        height: 1000px;
+    }
+
+    .cell {
+        display: inline-block;
+        position: relative;
+        width: var(--cell-size);
+        height: var(--cell-size);
+        line-height: calc(var(--cell-size) - 2px);
+        /*border: solid 1px black;*/
+        vertical-align: middle;
+        text-align: center;
+        font-size: 0;
+        box-sizing: border-box;
+    }
+
+    .cell::after {
+        content: '';
+        position: absolute;
+        top: calc(var(--cell-size) / 2);
+        left: 0;
+        width: var(--cell-size);
+        height: 0;
+        border-bottom: solid 1px rgba(0, 0, 0, .8);
+        z-index: -1;
+    }
+
+    .cell::before {
+        content: '';
+        position: absolute;
+        left: calc(var(--cell-size) / 2);
+        top: 0;
+        height: var(--cell-size);
+        width: 0;
+        border-right: solid 1px rgba(0, 0, 0, .8);
+        z-index: -1;
+    }
+
+    .piece {
+        display: inline-block;
+        width: calc(var(--cell-size) - 8px);
+        height: calc(var(--cell-size) - 8px);
+        border-radius: calc((var(--cell-size) - 8px) / 2);
+        vertical-align: middle;
+    }
+
+    .white {
+        background-color: #fff;
+        border: solid 1px #000;
+    }
+
+    .black {
+        background-color: #000;
+        border: solid 1px #000;
+    }
+</style>
+<body>
+
+<div class="board"></div>
+
+</body>
+
+<script>
+    let board = document.getElementsByClassName('board')[0]
+    let len = 10
+
+    let pattern = []   // 1:黑棋 2:白旗
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < len; j++) {
+            if (!pattern[i]) pattern[i] = []
+            if (i === 0 && j === 3) {
+                pattern[i][j] = 0
+            } else if (i === 1 && j === 3) {
+                pattern[i][j] = 0
+            } else {
+                pattern[i][j] = 0
+            }
+        }
+    }
+
+    let color = 1
+
+    const getPiece = type => {
+        if (type !== 1 && type !== 2) {
+            console.error('type error in piece')
+            return
+        }
+        const span = document.createElement('span')
+        span.classList.add('piece')
+        type === 1
+            ? span.classList.add('black') : span.classList.add('white')
+        return span
+    }
+
+
+    const show = () => {
+        board.innerHTML = ''
+        for (let i = 0; i < len; i++) {
+            for (let j = 0; j < len; j++) {
+                let cell = document.createElement('span')
+                cell.classList.add('cell')
+                board.appendChild(cell)
+
+                if (pattern[i][j] !== 0) {
+                    console.log(pattern[i][j])
+                    const piece = getPiece(pattern[i][j])
+                    cell.appendChild(piece)
+                } else
+                    cell.addEventListener('click', () => move(i, j))
+            }
+            board.appendChild(document.createElement('br'))
+        }
+    }
+    const move = (i, j) => {
+        pattern[i][j] = color
+        color = 3 - color;
+        show()
+        if (check(pattern, 3 - color)) {
+            alert(3 - color === 1 ? '黑方赢啦!' : '白方赢啦')
+        }
+        if (willWin(pattern, color)) {
+            console.log(`${color === 1 ? 'black' : 'white'} will win`)
+        }
+
+        // let choice = bestChoice(pattern, color)
+        // const [x, y] = choice.point
+        // computerMove(x, y)
+    }
+
+    // const computerMove = (i, j) => {
+    //     pattern[i][j] = color
+    //     color = 3 - color;
+    //     show()
+    //     if (check(pattern, 3 - color)) {
+    //         alert(3 - color === 1 ? '黑方赢啦!' : '白方赢啦')
+    //     }
+    //     if (willWin(pattern, color)) {
+    //         console.log(`${color === 1 ? 'black' : 'white'} will win`)
+    //     }
+    // }
+
+    // const bestChoice = (pattern, color) => {
+    //     let point = willWin(pattern, color)
+    //     if (point) {
+    //         return {
+    //             point,
+    //             result: 1
+    //         }
+    //     }
+    //
+    //     let result = -2
+    //     let p = null
+    //     let depth = 0
+    //     out:for (let i = 0; i < len; i++) {
+    //         for (let j = 0; j < len; j++) {
+    //             if (pattern[i][j] !== 0) continue
+    //             console.log('depth::',depth)
+    //             if (depth >= 10) break out
+    //             let tmpPattern = clone(pattern)
+    //             let r = bestChoice(tmpPattern, 3 - color).result
+    //             if (-r > result) {
+    //                 result = -r
+    //                 p = [i, j]
+    //             }
+    //             depth++
+    //             if (result === 1) break out
+    //         }
+    //     }
+    //
+    //     return {
+    //         result: result === -2 ? 0 : result,
+    //         point: p
+    //     }
+    // }
+
+    const willWin = (pattern, color) => {
+        for (let i = 0; i < len; i++) {
+            for (let j = 0; j < len; j++) {
+                if (pattern[i][j] !== 0) continue
+                let tmpPattern = clone(pattern)
+                tmpPattern[i][j] = color
+                if (check(tmpPattern, color)) {
+                    return [i, j]
+                }
+            }
+        }
+        return null
+    }
+
+    const clone = (data) => {
+        return JSON.parse(JSON.stringify(data))
+    }
+
+    const check = (pattern, color) => {
+        {
+            {
+                let win = false
+                for (let i = 0; i < len; i++) {
+                    for (let j = 0; j < len; j++) {
+                        if (pattern[i][j] === 0) continue
+                        if (
+                            pattern[i][j] === color
+                            && pattern[i][j + 1] === color
+                            && pattern[i][j + 2] === color
+                            && pattern[i][j + 3] === color
+                            && pattern[i][j + 4] === color
+                        ) {
+                            win = true
+                        }
+                        if (win)
+                            return win
+                    }
+                }
+            }
+
+            {
+                let win = false
+                for (let i = 0; i < len; i++) {
+                    for (let j = 0; j < len; j++) {
+                        if (pattern[i][j] === 0) continue
+                        if (
+                            pattern[i][j] === color
+                            && i + 1 < len && pattern[i + 1][j] === color
+                            && i + 2 < len && pattern[i + 2][j] === color
+                            && i + 3 < len && pattern[i + 3][j] === color
+                            && i + 4 < len && pattern[i + 4][j] === color
+                        ) {
+                            win = true
+                        }
+                        if (win)
+                            return win
+                    }
+                }
+            }
+
+            {
+                let win = false
+                for (let i = 0; i < len; i++) {
+                    for (let j = 0; j < len; j++) {
+                        if (pattern[i][j] === 0) continue
+                        if (
+                            pattern[i][j] === color
+                            && i + 1 < len && pattern[i + 1][j + 1] === color
+                            && i + 2 < len && pattern[i + 2][j + 2] === color
+                            && i + 3 < len && pattern[i + 3][j + 3] === color
+                            && i + 4 < len && pattern[i + 4][j + 4] === color
+                        ) {
+                            win = true
+                        }
+                        if (win)
+                            return win
+                    }
+                }
+            }
+
+            {
+                let win = false
+                const max = len - 1
+                for (let i = max; i > 0; i--) {
+                    for (let j = max; j > 0; j--) {
+                        if (pattern[i][j] === 0) continue
+                        if (
+                            pattern[i][j] === color
+                            && i - 1 >= 0 && pattern[i - 1][j + 1] === color
+                            && i - 2 >= 0 && pattern[i - 2][j + 2] === color
+                            && i - 3 >= 0 && pattern[i - 3][j + 3] === color
+                            && i - 4 >= 0 && pattern[i - 4][j + 4] === color
+                        ) {
+                            win = true
+                        }
+                        if (win)
+                            return win
+                    }
+                }
+            }
+            return null
+        }
+    }
+
+    show()
+</script>
+

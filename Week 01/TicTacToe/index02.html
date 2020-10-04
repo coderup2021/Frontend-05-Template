@@ -114,7 +114,7 @@
         }
         let result = -2
         let point = null
-        for (let i = 0; i < 3; i++) {
+        out:for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (pattern[i * 3 + j]) continue
                 let tmpPattern = clone(pattern)
@@ -125,6 +125,7 @@
                     result = -r
                     point = [i, j]
                 }
+                if(result === 1) break out
             }
         }
         return {

@@ -1,0 +1,40 @@
+<script>
+    /*  regexp匹配结果索引rIndex 与 dictionary数组索引关系dIndex 为  rIndex = dIndex+1  */
+    var regexp = /([0-9\.]+)|([ \t]+)|([\r\n]+)|(\*)|(\/)|(\+)|(\-)/g
+    var dictonary = ["Number", "Whitespace", "LineTerminator", "*", "/", "+", "-"]
+
+    function* tokenize(source) {
+        var result = null
+        var lastIndex = 0
+        while (true) {
+            lastIndex = regexp.lastIndex
+            result = regexp.exec(source)
+            if (!result) break;
+            if (regexp.lastIndex - lastIndex > result[0].length)  //表示 匹配出来的 有不认识的字符
+                break;
+            let token = {
+                type: null,
+                value: null,
+            }
+            for (var i = 1; i <= dictonary.length; i++) {    //循环dictionary 根据result和dictionary的匹配关系 得到token的type
+                if (result[i]) {
+                    token.type = dictonary[i - 1]
+                }
+            }
+            token.value = result[0]
+            yield token;  //(回调转同步)
+        }
+        yield {
+            type: 'EOF'
+        }
+    }
+
+    let source = []
+    let str = "1024 + 10 * 25"
+    for (let token of tokenize(str)) {
+        if (token.type !== 'Whitespace' && token.type !== "LineTerminator")
+            source.push(token)
+    }
+    console.log(source)
+
+</script>

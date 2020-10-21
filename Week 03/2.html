@@ -1,0 +1,96 @@
+<script>
+    /*  regexp匹配结果索引rIndex 与 dictionary数组索引关系dIndex 为  rIndex = dIndex+1  */
+    var regexp = /([0-9\.]+)|([ \t]+)|([\r\n]+)|(\*)|(\/)|(\+)|(\-)/g
+    var dictionary = ["Number", "Whitespace", "LineTerminator", "*", "/", "+", "-"]
+
+
+
+    function* tokenize(source) {
+        var result = null
+        var lastIndex = 0
+        while (true) {
+            lastIndex = regexp.lastIndex
+            result = regexp.exec(source)
+            if (!result) break;
+            if (regexp.lastIndex - lastIndex > result[0].length)  //表示 匹配出来的 有不认识的字符
+                break;
+            let token = {
+                type: null,
+                value: null,
+            }
+            for (var i = 1; i <= dictionary.length; i++) {  //循环dictionary 根据result和dictionary的匹配关系 得到token的type
+                if (result[i]) {
+                    token.type = dictionary[i - 1]
+                }
+            }
+            token.value = result[0]
+            yield token;  //(回调转同步)
+        }
+        yield {
+            type: 'EOF'
+        }
+    }
+
+    let source = []
+    let str = "10 * 25 / 2"
+    for (let token of tokenize(str)) {
+        if (token.type !== 'Whitespace' && token.type !== "LineTerminator")
+            source.push(token)
+    }
+
+    function Expression(source) {
+
+    }
+
+    function AdditiveExpression(source) {
+
+    }
+
+    function MultiplicativeExpression(source) {
+        console.log(source)
+        if (source[0].type === 'Number') {
+            const node = {
+                type: 'MultiplicativeExpress',
+                children: [source[0]]
+            }
+            source[0] = node
+            return MultiplicativeExpression(source)  //递归回调再次判断
+        }
+
+        if (source[0].type === 'MultiplicativeExpress' && source[1] && source[1].type === '*') {
+            const node = {
+                type: 'MultiplicativeExpress',
+                operator: '*',
+                children: []
+            }
+            node.children.push(source.shift())
+            node.children.push(source.shift())
+            node.children.push(source.shift())
+            source.unshift(node)
+            return MultiplicativeExpression(source)  //递归回调再次判断
+        }
+
+        if (source[0].type === 'MultiplicativeExpress' && source[1] && source[1].type === '/') {
+            const node = {
+                type: 'MultiplicativeExpress',
+                operator: '/',
+                children: []
+            }
+            node.children.push(source.shift())
+            node.children.push(source.shift())
+            node.children.push(source.shift())
+            source.unshift(node)
+            return MultiplicativeExpression(source)   //递归回调再次判断
+        }
+        if (source[0].type === 'MultiplicativeExpress') {   //因为前面的if都有return , 所以这里形成一个else分支
+            return source[0]
+        }
+
+        return MultiplicativeExpression(source)  //这行代码 正常情况下 不会执行
+    }
+
+
+    MultiplicativeExpression(source)
+    console.log(source)
+
+</script>

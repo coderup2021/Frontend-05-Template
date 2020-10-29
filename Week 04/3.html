@@ -1,0 +1,60 @@
+<script>
+    /* wildCard 寻找字符串 */
+    //"abcabcabxaac" "a*b*bx*c"
+    function find(source, pattern){
+        //计算*号的个数 
+        var starCount = 0
+        for(var i=0; i<pattern.length; i++)
+            if(pattern[i] === '*')
+                starCount++
+
+        //考虑startCount = 0的边缘情况
+        if(starCount === 0){
+            for(i=0; i<pattern.length; i++)
+                if(pattern[i] !== source[i] && pattern[i] !=='?')
+                    return false
+        }
+
+        // 匹配第一个*号之前的字符 
+        i=0;
+        var lastIndex = 0;
+        for(i=0; pattern[i]!='*'; i++){
+            if(pattern[i] !== source[i] && pattern[i] !=='?'){
+                return false
+            }
+        }
+        lastIndex = i 
+
+        //匹配最后一个*号之前的字符， 
+        //思路： 将两个*号之间的字符作为正则表达式 从source的lastIndex开始匹配
+
+        for(p=0; p<starCount-1; p++){
+            var subPattern = ''
+            i++
+            while(pattern[i] !== '*'){
+                subPattern += pattern[i]
+                i++
+            }
+
+            let reg = new RegExp(subPattern.replace(/\?/g, '[\\s\\S]'), 'g')  //RegExp的第二个参数必须使用 ‘g’, lastIndex才生效
+            reg.lastIndex = lastIndex
+            let ret = reg.exec(source)
+            console.log(ret, reg)
+            if(!ret){
+                    return false
+            }
+            lastIndex = reg.lastIndex
+        }
+
+        //匹配最后一个*号之后的字符串
+        for(i=0; i<pattern.length-lastIndex && pattern[pattern.length-1]!=='*'; i++){
+            if(pattern[pattern.length-i] !== source[source.length-i] && pattern[pattern.length-i]!=='?'){
+                return false
+            }
+        }
+        return true
+    }
+
+//    console.log( find("abcabcabxaac", "a*b*bx*c"))
+   console.log( find("abcabcabxaa8786c", "a*a?c*b?xa*c"))
+</script>

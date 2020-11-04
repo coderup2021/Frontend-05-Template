@@ -1,0 +1,68 @@
+<span id='rv' style="width:60; display: inline-block"></span><input id='r' type='range' min=0 max=255><br/>
+<span id='gv' style="width:60; display: inline-block"></span><input id='g' type='range' min=0 max=255><br/>
+<span id='bv' style="width:60; display: inline-block"></span><input id='b' type='range' min=0 max=255><br/>
+
+<div id='color' style="width:200; height:200; backgroundColor:white"></div>
+<script>
+    var callbacks = new Map()
+    var usedReactivities = []
+    var reactivities = new Map()
+    var obj = {
+            r: 12,
+            g: 200,
+            b: 200,
+        }
+    
+    function reactive(obj){
+        if(reactivities.has(obj))
+            return reactivities.get(obj)
+
+        var po = new Proxy(obj, {
+            set(obj, prop, value){
+                obj[prop] = value
+                if(callbacks.has(obj))
+                    if(callbacks.get(obj).has(prop))
+                        for(var callback of callbacks.get(obj).get(prop))
+                            callback()
+            },
+            get(obj, prop){
+                usedReactivities.push([obj,prop])
+                if(typeof obj[prop] === 'object')
+                    return reactive(obj[prop])
+                return obj[prop]
+            }
+        })
+        reactivities.set(obj, po)
+        return po
+    }
+
+    function effect(callback){
+        callback()
+        for(var reactivity of usedReactivities){
+            if(!callbacks.has(reactivity[0]))
+                callbacks.set(reactivity[0], new Map())
+            if(!callbacks.get(reactivity[0]).has(reactivity[1]))
+                callbacks.get(reactivity[0]).set(reactivity[1], []) //此处如果用数组来存callback 如果effect里面多次调用了po的某个属性 会遇到callback重复的问题
+
+            callbacks.get(reactivity[0]).get(reactivity[1]).push(callback)
+        }
+    }
+
+    var po = reactive(obj)
+    effect(()=>{
+        document.getElementById('r').value = po.r
+        document.getElementById('rv').innerText = po.r
+        document.getElementById('g').value = po.g
+        document.getElementById('gv').innerText = po.g
+        document.getElementById('b').value = po.b
+        document.getElementById('bv').innerText = po.b
+    })
+    effect(()=>{
+        document.getElementById('color').style.backgroundColor = `rgb(${po.r},${po.g},${po.b})`
+    })
+
+    document.getElementById('r').addEventListener('input', event=> po.r = event.target.value)
+    document.getElementById('g').addEventListener('input', event=> po.g = event.target.value)
+    document.getElementById('b').addEventListener('input', event=> po.b = event.target.value)
+
+</script>

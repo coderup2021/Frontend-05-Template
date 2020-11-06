@@ -9,9 +9,17 @@
 </head>
 <div id='dragable'></div>
 <script>
+    /**
+    ** 核心思想：
+    ** 1. 将mousemove和mouseup事件写在mousedown事件内部, 才能最节约性能
+    ** 2. 在mouseup事件中需要取消mousemove和mouseup事件
+    ** 3. 使用css的transform属性(改变其中的translate)实现拖拽移动
+    ** 4. 每次开始拖拽，需要记录mousedown事件发生的坐标点(startX, startY)， 并算如translate
+    ** 5. 每次拖拽结束，需要记录mouseup事件发生的坐标点(baseX, baseY)， 并算如translate
+    **/
     var dragable = document.getElementById('dragable')
     var baseX=0, baseY=0
-    dragable.addEventListener('mousedown', (event)=>{
+    dragable.addEventListener('mousedown', (event)=>{  // mousemove事件需要写在mousedown事件内部，
         var startX = event.clientX, startY=event.clientY
         const up = (event)=>{
             baseX = baseX + event.clientX - startX

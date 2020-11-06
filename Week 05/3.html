@@ -19,7 +19,7 @@
         return new Proxy(object, {
             set(obj, prop, val){
                 obj[prop] = val
-                for(let callback of callbacks){
+                for(let callback of callbacks){   //这里造成callback大量的重复执行， 会存在很大的性能问题; 
                     callback()
                 }
                 return obj[prop]

@@ -4,6 +4,10 @@
 
 <div id='color' style="width:200; height:200; backgroundColor:white"></div>
 <script>
+    /**
+    ** 利用effect实现双向绑定， 
+    ** 用双向绑定实现调色板
+    **/
     var callbacks = new Map()
     var usedReactivities = []
     var reactivities = new Map()
@@ -50,6 +54,7 @@
 
     var po = reactive(obj)
     effect(()=>{
+        //绑定rgb输入元素和代理对象po的属性 (m->v)
         document.getElementById('r').value = po.r
         document.getElementById('rv').innerText = po.r
         document.getElementById('g').value = po.g
@@ -58,9 +63,10 @@
         document.getElementById('bv').innerText = po.b
     })
     effect(()=>{
+        //绑定最终形成的色板色值 和 代理对象po的属性 (m->v)
         document.getElementById('color').style.backgroundColor = `rgb(${po.r},${po.g},${po.b})`
     })
-
+    //绑定rgb的input事件到代理对象po上(v->m)
     document.getElementById('r').addEventListener('input', event=> po.r = event.target.value)
     document.getElementById('g').addEventListener('input', event=> po.g = event.target.value)
     document.getElementById('b').addEventListener('input', event=> po.b = event.target.value)

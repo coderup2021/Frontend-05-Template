@@ -1,5 +1,9 @@
 <script>
-    /*实现reactivity  优化 effect性能 */
+    /*
+    实现reactivity  优化 effect性能 
+    : 用map存储对象，属性 和callback的属性，
+      这样在set的api中可以找出对应的callback来执行， 避免全部callback都执行
+    */
     let callbacks = new Map()
     let usedReactivities = [] 
     let object = {
@@ -9,15 +13,20 @@
 
     function effect(callback){
         // callbacks.push(callback)
-        usedReactivities = []
-        callback()
+        usedReactivities = []  // 清空
+        callback()   //1.先执行一次， 如果通过po调用了object的属性, 则会进入po的get的api  
 
-        for(let reactivity of usedReactivities){
+        for(let reactivity of usedReactivities){ // 3.将usedReactivities收集到的reactivities(对象和属性)和callback进行绑定,写入callbacks
             if(!callbacks.has(reactivity[0])) 
                 callbacks.set(reactivity[0], new Map())
             if(!callbacks.get(reactivity[0]).has(reactivity[1])) 
                 callbacks.get(reactivity[0]).set(reactivity[1], [])
-            callbacks.get(reactivity[0]).get(reactivity[1]).push(callback)
+            callbacks.get(reactivity[0]).get(reactivity[1]).push(callback) 
+            /**
+            这里用数组存callback也会有一定的性能问题,
+            如果callback里面 多次调用了同一个属性， 那callbacks里面就会存多分相同的callback,(除非在push之前先检查)
+            在proxy的set里面遇到这个属性， 就会重复执行相同的callback
+            **/
             console.log(callbacks)
         }
     }
@@ -25,7 +34,7 @@
     function reactive(obj){
         let po = new Proxy(obj, {
             set(obj, prop, value){
-                if(callbacks.get(obj))
+                if(callbacks.get(obj))  // 4.检查callbacks中是否有被操作对象的callback(过滤), 有则执行该callback
                     if(callbacks.get(obj).get(prop))
                         for(const callback of callbacks.get(obj).get(prop))
                             callback()
@@ -33,7 +42,7 @@
                 return obj[prop]
             },
             get(obj, prop){
-                usedReactivities.push([obj, prop])
+                usedReactivities.push([obj, prop]) // 2. 记录在effect中使用了的对象和属性
                 return obj[prop]
             }
         })

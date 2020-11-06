@@ -1,7 +1,10 @@
 <script>
-    /*实现reactivity  优化 effect性能 */
+    /*实现reactivity  优化 effect性能 
+        实现对多层级的属性进行reactive
+        (核心思想： 建立一个模块作用域的map来缓存reactivity)
+    */
     let callbacks = new Map()
-    let reactivities = new Map()
+    let reactivities = new Map() //建立一个模块作用域的的缓存
     let usedReactivities = [] 
     let object = {
         a: {x:1},
@@ -24,7 +27,7 @@
     }
 
     function reactive(obj){
-        if(reactivities.has(obj)){
+        if(reactivities.has(obj)){  //如果缓存有， 则直接从缓存返回  (核心1)
             return reactivities.get(obj)
         }
         let po = new Proxy(obj, {
@@ -38,13 +41,13 @@
             },
             get(obj, prop){
                 usedReactivities.push([obj, prop])
-                if(typeof obj[prop] === 'object'){
+                if(typeof obj[prop] === 'object'){ //如果是对象， 则再调用一次reactive   (核心2)
                     return reactive(obj[prop])
                 }
                 return obj[prop]
             }
         })
-        reactivities.set(obj, po)
+        reactivities.set(obj, po)    //将reactive添加到缓存  (核心3)
         return po
     }
     const po = reactive(object)

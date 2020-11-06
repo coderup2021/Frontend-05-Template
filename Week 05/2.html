@@ -17,5 +17,9 @@
             }
         })
     }
-    let po = reactive(object)
+    let po = reactive(object) 
+    /** po对象已经是object的代理，
+     ** Proxy可以实现操作object所有属性的api的调整, 这里只实现了get,set两个api，
+     ** 通过po去访问object的属性均会走代理， 而使用object去访问则不会。
+     **/
 </script>

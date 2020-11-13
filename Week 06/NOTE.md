@@ -104,7 +104,7 @@ MultiplicativeExpression
 
 * 形式语言——用途
   * 数据描述语言 ： [ JSON, HTML, XML, SQL, CSS, ... ]
-  * 编程语言：[ C, C++, Java, C#, Python, Ruby, Perl, Lisp, T-SQL, Clojure, Haskell, Javascript ... ]
+  * 编程语言：[ C, C++, Java, C#, Python, Ruby, Perl, Lisp, R, SQL, Clojure, Haskell, Javascript ... ]
 * 形式语言——表达方式
   * 声明式语言： [ JSON, HTML, XMAL, SQL, CSS, Lisp, Clojure, Haskell ]
   * 命令式语言：[  C, C++, Java, C#, Python, Ruby, Perl, Javascript ... ]

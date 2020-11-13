@@ -1,4 +1,4 @@
-# Atom (原子)
+# 一. Atom (原子)
 
 ### Grammar
 
@@ -26,7 +26,7 @@
 
 
 
-## 1. Number
+# 二. Number
 
 #### Number Concept - IEEE 754 Double Float
 
@@ -65,7 +65,7 @@
 
 
 
-## 2.String
+# 三.String
 
 * Charactor Set  (字符集)
 * Code Point (码点)
@@ -95,6 +95,40 @@ GB同时规定了字符集和编码方式，和别的不冲突， 唯独Unicode�
 参考： 
 
 [UTF-8编码规则]: https://blog.csdn.net/qq_43043859/article/details/89510121
+[汉字 Unicode 编码范围]: https://www.qqxiuzi.cn/zh/hanzi-unicode-bianma.php
+[js判断字符是否是汉字的两种方法小结]: https://www.jb51.net/article/45143.htm
+
+##### 练习：获取字符后者汉字的 UTF8 2进制编码
+
+```js
+// 获取字符后者汉字的 UTF8 2进制编码
+function getUTF8Code(char){
+    if(!char) return ''
+    let charCode = char.charCodeAt(0)
+    if(charCode > 255){  //汉字
+        let bin = charCode.toString(2)
+        bin = bin.padStart(16, 0)  //高位补0至16位
+        console.log('bin:', bin)
+        let firstPre = "1110" //第一个字节控制位
+        let otherPre = "10"  //第二，三个字节控制位
+        let first = firstPre + bin.substr(0,4); //第一个字节： bin的前4位拼接在控制位后面
+        let second = otherPre + bin.substr(4,6); //第二个字节： bin的4-9位拼接在控制位后面
+        let third = (otherPre + bin.substr(10,bin.length-10)).padEnd(8,0); //第三个字节： bin的第10位及以后拼接在控制位后面
+        return `${first} ${second} ${third}`
+    }else{ //非汉字
+        return charCode.toString(2).padStart(8,0)
+    }
+}
+
+let c = getUTF8Code('a')
+console.log(c)  //01100001
+
+let m = getUTF8Code('我')
+console.log(m) //11100110 10001000 10010001
+
+let y = getUTF8Code('一')
+console.log(y) //11100100 10111000 10000000
+```
 
 
 
@@ -134,11 +168,183 @@ GB同时规定了字符集和编码方式，和别的不冲突， 唯独Unicode�
 
 #### Grammar Template Function 用法
 
+```js
+//带标签的模板字符串，可以自定义函数处理模板字符串
+
+var person = 'Mike';
+var age = 28;
+function myTag(strings, personExp, ageExp) {
+  var str0 = strings[0]; // "that "
+  var str1 = strings[1]; // " is a "
+  // There is technically a string after
+  // the final expression (in our example),
+  // but it is empty (""), so disregard.
+  // var str2 = strings[2];
+  var ageStr;
+  if (ageExp > 99){
+    ageStr = 'centenarian';
+  } else {
+    ageStr = 'youngster';
+  }
+  return str0 + personExp + str1 + ageStr;
+}
+var output = myTag`that ${ person } is a ${ age }`;
+console.log(output);  //输出字符串that Mike is a youngster
+```
 
 
 
+# 四. Boolean
+
+* true
+* false
+
+# 五. NULL & Undefined
+
+* null      关键字
+
+* undefined    变量
+
+* void 0;
+
+  因为undefined被设计成了变量， 所以在早期浏览器中可以对undefined进行赋值，从而对程序造成很严重的影响。而null则是关键字，所以可以放心使用null
+
+  ```js
+  function f(){
+  	undefined = 1
+  	console.log(undefined)  //早期浏览器会打印出  1
+  }
+  
+  function ff(){
+      null = 1	//报错， 因为null是关键字
+      console.log(null)
+  }
+  ```
+
+  如何使用undefined?
+
+  使用void 0表示undefined, 因为void是关键字， void后面无论跟什么， 都会把它的返回值变成undefined
 
 
+
+# 六 Object
+
+## 1. 基础知识
+
+面向对象三要素：
+
+* 对象具有唯一标识性：两个完全相同的对象， 仍然是不相等的
+
+* 对象具有状态，即对象的属性
+
+* 对象具有行为，即对象的方法
+
+  winter老师在视频中说到，对象的行为可以改变对象的状态，只的是改变自身的状态， 如果改变的是其他对象的状态， 这不是正统的面向对象的编程方法。
+
+  这个好像和现实生活中的对象行为有所不同， 比如现实生活中，医生给病人看病，这个行为的主要目标是把病人治好，改变的是病人的状态（当然医生自己的状态也会有一些改变，比如技术提升了，收入增加了，但并非这个行为的主要目标，在此忽略）。所以还需要在以后的真实编程中深入理解编程世界中的面向对象。
+
+## 2. Object In Javascript
+
+​	在javacript运行时， 原生对象的描述方式很简单， 我们只需要关注原型和属性两个部分
+
+* 属性
+
+  属性结构为 K => V, 
+
+  * K: 其中K可以为String或者Symbol.
+
+    当使用String时， 只要代码使用者看了你的源码，拿到对象实例后， 他总能通过你使用的String属性访问你的属性。
+
+    而Symbol就不一样， Symbol在内存中创建后，只能通过变量去引用它， 我们无法构建两个一模一样的Symbol, 即使他们名字相同，他们也不相等， 这样可以很好的**实现属性访问的权限控制**， 如果你不把Symbol的变量传递给下家，你编写的代码是使用值是无法访问你用Symbol名字作为K的属性值。
+
+  * V：包括（Data Property 和 Accessor Property)
+
+    javascript使用属性来统一抽象对象状态和行为， 一般来说， 数据属性用于描述状态， 访问器属性则用于描述行为， 数据属性如果是一个函数,且操作了对象的状态， 也是描述了行为
+
+    * Data Property
+
+      * Value
+
+      * writable（可写）
+
+      * enumerable（可枚举, 影响Object.keys, for in, JSON.stringify）
+
+      * configurable（可配置）
+
+        当configurable为false时， enumerable, writable包括configurable自身都将不可再次配置（报错： TypeError: Cannot redefine property: a）
+
+        将writable和configurable同时设置为false, 即可以实现属性值定义后无法修改的场景
+
+        
+
+    * Accessor Property
+
+      * get
+      * set
+      * enumerable （可枚举, 影响Object.keys, for in, JSON.stringify）
+      * configurable （可配置）
+
+
+
+* 原型
+
+  定义：当我们访问属性时， 如果当前对象没有， 则会沿着原型找原型对象是否有次名称的属性，而原型对象还可能有原型，因此会有“原型链”这一说法
+
+  这一算法保证了， 每个对象只需要描述自己和原型的区别即可
+
+  * Object API  &  Grammar
+    * {}. []  Object.defineProperty   定义对象，访问属性，定义属性特征值
+    * Object.create, Object.setPrototypeOf, Object.getPrototypeOf  操作对象原型相关的方法
+    * new, calss, extend  基于分类的方式描述对象
+    * new, function, prototype  历史包袱，es3实现的原型继承方式（es6的class只是该方式的语法糖），但现在已不推荐使用，除非必须使用es3
+
+## 3. Function Object
+
+#### 定义：	
+
+​	函数是一个具有[[call]]方法的特殊对象  Object[[call]]
+
+#### 双中括号[[call]]是什么？
+
+​	凡是双中括号括起来的方法都是对象的内置行为，在javascript方法中，无论通过任何方法都没有办法访问到它。
+
+我们使用function关键字， 箭头运算符或者Function构造器创建的对象，都会有[[call]]这个方法。
+
+当我们使用类似f()这样的语法把对象当做函数调用时，就会访问到[[call]]这个行为， 如果对应的对象没有[[call]]方法，则会报错
+
+#### 其他特殊对象
+
+* Array 具有 [[length]] 访问器属性
+* Object.prototype没有[[setProtypeOf]]属性
+
+### 课堂练习：找出JavaScript 标准里面所有具有特殊行为的对象
+
+| 基本类型 | 基础功能和数据结构 | 错误类型       | 二进制操作        | 带类型的数组      |
+| -------- | ------------------ | -------------- | ----------------- | ----------------- |
+| Boolean  | Array              | Error          | ArrayBuffer       | Float32Array      |
+| String   | Date               | EvalError      | SharedArrayBuffer | Float64Array      |
+| Number   | RegExp             | RangeError     | DataView          | Int8Array         |
+| Symbol   | Promise            | ReferenceError |                   | Int16Array        |
+| Object   | Proxy              | SyntaxError    |                   | Int32Array        |
+|          | Map                | TypeError      |                   | Uint8Array        |
+|          | WeakMap            | URIError       |                   | Uint16Array       |
+|          | Set                |                |                   | Uint32Array       |
+|          | WeakSet            |                |                   | Uint8ClampedArray |
+|          | Function           |                |                   |                   |
+
+​	
+
+## 4.Host Object 宿主环境提供的对象
+
+​	浏览器宿主对象
+
+* window
+
+* setTimeout
+
+* ...
+
+  宿主环境可以实现javascript语言不支持，但是javascript语法支持的函数， 也可以实现具有[[constructor]],[[call]]这样的内置行为来实现new和函数调用， 所以[[]]的内置行为，在javascript中是访问不到的， 但是在调用javascript引擎的C和C++代码中是可以实现并且调用的
 
 
 

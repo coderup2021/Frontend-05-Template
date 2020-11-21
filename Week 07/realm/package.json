@@ -1,0 +1,17 @@
+{
+  "name": "realm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server --open"
+  },
+  "dependencies": {
+    "@antv/g6": "^3.8.5"
+  },
+  "devDependencies": {
+    "webpack": "4.41.5",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "3.10.2"
+  }
+}

@@ -26,7 +26,8 @@ console.log(m) //11100110 10001000 10010001
 let y = getUTF8Code('一')
 console.log(y) //11100100 10111000 10000000
 
-const a = Buffer.from('a', 'utf8')
-console.log('a:',a)
-let aa = a.toString('utf8')
-console.log(aa)
+
+function UTF_Encoding(string){
+    let result =[]
+    
+}

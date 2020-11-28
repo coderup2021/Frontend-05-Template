@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    window.onerror = function (message, url, line, column, error) {
+        console.log('log---onerror::::',message, url, line, column, error);
+    }
+        var a= 2;
+        void function(){
+            throw new Error('xxxxxxxxxxx')
+            a = 1
+            // const a
+            return 
+            console.log('inside:',a)
+        }()
+        // console.log('outside', a)
+    throw new Error("throw error")
+</script>
+</html>

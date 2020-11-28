@@ -67,6 +67,10 @@ Response 结构图解：
 
 ![p3][p3]
 
+参考：
+
+[HTTP 协议中的 Transfer-Encoding][https://imququ.com/post/transfer-encoding-header-in-http.html]
+
 ### 	3. 发送请求
 
 * 设计支持已有的connection或者自己新建connection

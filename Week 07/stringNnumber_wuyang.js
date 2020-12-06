@@ -2,7 +2,7 @@ function StringToNumber (string) {
     const decimalPattern = /^([\+\-])?(\d+)?(?:\.(\d*))?(?:e([+-]?)(\d+))?$/i;
     const binaryPattern = /^([\+\-])?0b([0-1]+)$/i;
     const octalPattern = /^([\+\-])?0o([0-7]+)$/i;
-    const hexadecimalPattern = /^([\+\-])?0x([0-9a-f]+)$/i;
+    const hexadec/imalPattern = /^([\+\-])?0x([0-9a-f]+)$/i;
 
     const charMapping = {
         '0': 0, '1': 1, '2': 2, '3': 3,

@@ -64,7 +64,7 @@ Left Handside & Right Handside
   * a++, a--
   * ++a, --a
 
-* Expressions - Unary    //优先级第五
+* Expressions - Unary （一元运算符）    //优先级第五
 
   * delete a.b
   * void foo()
@@ -87,7 +87,7 @@ Left Handside & Right Handside
   
 * \+, -, 	//加法有两种，一种两边都是数字， 另一种是字符串相加
   
-*  Expressions - Shift (位运算)    //优先级第九
+*  Expressions - Shift (位移运算)    //优先级第九
   
   * <<, >>, >>>,
 * Expressions - Relationship     //优先级第十
@@ -98,7 +98,7 @@ Left Handside & Right Handside
   * !=
   * ===
   * !==
-* Expressions - BitWise       //优先级第十二
+* Expressions - BitWise  (**按位操作符**)     //优先级第十二
   
   * &, ^, |
 * Expressions - Logic         //优先级第十三

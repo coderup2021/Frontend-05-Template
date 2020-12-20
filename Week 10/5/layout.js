@@ -25,16 +25,16 @@ function layout(element) {
 		//ToyBrowser 只处理flex排版，忽略其他排版格式
 		return;
 
-	var items = element.children.filter((item) => item.type === "element");
+	var items = element.children.filter((item) => !!item.tagName);
 
 	items
-		.sort((a, b) => (a.order || 0) - (b.order || 0))
+		.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-		[("width", "height")].forEach((size) => {
-			if (style[size] === "" || style[size] === "auto") {
-				style[size] = null;
-			}
-		});
+	["width", "height"].forEach((size) => {
+		if (style[size] === "" || style[size] === "auto") {
+			style[size] = null;
+		}
+	});
 
 	if (!style.flexDirection || style.flexDirection === "auto") style.flexDirection = "row";
 
@@ -48,7 +48,7 @@ function layout(element) {
 
 	if (!style.alignContent || style.alignContent === "auto") style.alignContent = "stretch";
 
-	let mainSize, mainStart, mainEnd, mainSign, mainBase;
+	let mainSize, mainStart, mainEnd, mainSign, mainBase,
 	crossSize, crossStart, crossEnd, crossSign, crossBase;
 
 	if (style.flexDirection === "row") {
@@ -128,12 +128,12 @@ function layout(element) {
 			flexLine.push(item);
 		} else if (style.flexWrap === "nowrap" && isAutoMainSize) {
 			mainSpace -= itemStyle[mainSize];
-			if (item[crossSize] !== null && item[crossSize] !== void 0)
+			if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== void 0)
 				crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
 			flexLine.push(item);
 		} else {
-			if (itemStyle[mainSize] > item[mainSize]) itemStyle[mainSize] = item[mainSize];
-			if (mainSpace < item[mainSize]) {
+			if (itemStyle[mainSize] > style[mainSize]) itemStyle[mainSize] = Style[mainSize];
+			if (mainSpace < itemStyle[mainSize]) {
 				flexLine.mainSpace = mainSpace;
 				flexLine.crossSpace = crossSpace;
 				flexLine = [item];
@@ -143,7 +143,7 @@ function layout(element) {
 			} else {
 				flexLine.push(item);
 			}
-			if (item[crossSize] !== null && item[crossSize] !== void 0)
+			if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== void 0)
 				crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
 			mainSpace -= itemStyle[mainSize];
 		}
@@ -195,7 +195,21 @@ function layout(element) {
 			}
 
 			if (flexTotal > 0) {
-				let currentMain = currentBase;
+
+
+
+
+
+
+
+				let currentMain = 0;
+				
+				
+
+				
+				
+				
+				
 				for (let i = 0; i < items.length; i++) {
 					let item = items[i];
 					let itemStyle = getStyle(item);
@@ -294,8 +308,8 @@ function layout(element) {
 		flexLines.forEach(function (item) {
 			let lineCrossSize =
 				style.alignContent === "stretch"
-					? items.crossSpace + crossSpace / flexLines.length
-					: items.crossSpace;
+					? item.crossSpace + crossSpace / flexLines.length
+					: item.crossSpace;
 
 			for (let i = 0; i < items.length; i++) {
 				let item = items[i];

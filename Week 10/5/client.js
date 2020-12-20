@@ -197,8 +197,8 @@ void (async function () {
 	 * 此处为了简化，采用将 response.body全部接收完毕后再解析 response.body
 	 */
 	let dom = parser.parseHTML(response.body); //核心
-	console.log("dom", dom);
 	let viewport = images(800, 600);
-	render(viewport, dom.children[0].children[3].children[1].children[3]);
-	viewport.save("./viewport.jpg");
+	// render(viewport, dom.children[0].children[3].children[1].children[3]);
+	render(viewport, dom);
+	viewport.save("./Week 10/5/viewport.jpg");
 })();

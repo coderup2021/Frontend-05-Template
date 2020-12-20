@@ -29,7 +29,7 @@ function layout(element) {
 	items
 		.sort((a, b) => (a.order || 0) - (b.order || 0))
 
-		[("width", "height")].forEach((size) => {
+		["width", "height"].forEach((size) => {
 			if (style[size] === "" || style[size] === "auto") {
 				style[size] = null;
 			}

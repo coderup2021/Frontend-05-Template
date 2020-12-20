@@ -130,7 +130,7 @@ function emitToken(token){
             }
         }
         computeCss(element)  //在startTag入栈时， 开始计算css规则
-
+        layout(element)
         top.children.push(element)
         element.parent = top
         if(!token.isSelfClosing){
@@ -144,7 +144,6 @@ function emitToken(token){
             if(top.tagName === 'style'){
                 addCssRules(top.children[0].content)
             }
-            layout(top)
             stack.pop()
         }
         currentTextNode = null

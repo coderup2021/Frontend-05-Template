@@ -201,4 +201,5 @@ void async function(){   //因为里面使用了await，所以需要用async fun
      * 此处为了简化，采用将 response.body全部接收完毕后再解析 response.body
      */
     let dom = parser.parseHTML(response.body)  //核心
+    console.log(dom)
 }()

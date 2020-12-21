@@ -413,7 +413,7 @@ first-letter 可以设置的属性
 </div>
 ```
 
-first-lline 可以设置的属性
+first-line 可以设置的属性
 
 * font系列
 
@@ -432,6 +432,22 @@ first-lline 可以设置的属性
 * line-height
 
   
+
+## 思考题： 为什么 first-letter 可以设置 float 之类的，而 first-line 不行呢？
+
+* 根本原因在于**:first-line**描述的文本长度不是一个确定的值。因此会触发一些重新计算或者改变 文档流的属性被限制使用
+
+* 官方对于**:first-line**的属性限制的原因只是一句话带过。所以我们只能做可能的推测
+
+* [sel-first-line](https://www.w3.org/TR/selectors-3/#sel-first-line)
+
+* > The [`::first-line`](https://www.w3.org/TR/selectors-3/#sel-first-line) pseudo-element is similar to an inline-level element, but with certain restrictions. The following CSS properties apply to a [`::first-line`](https://www.w3.org/TR/selectors-3/#sel-first-line) pseudo-element: font properties, color property, background properties, ‘`word-spacing`’, ‘`letter-spacing`’, ‘`text-decoration`’, ‘`text-transform`’, ‘`line-height`’. UAs may apply other properties as well.
+
+
+
+
+
+
 
 
 

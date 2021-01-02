@@ -1,0 +1,17 @@
+<div id="outer" style="width: 100%; height: 300px; background: lightblue">
+	<div id="inner" style="width: 100%; height: 200px; background: pink"></div>
+</div>
+<script>
+	var outer = document.getElementById("outer");
+	var inner = document.getElementById("inner");
+	outer.addEventListener("click", () => {
+		console.log("outer");
+	});
+	inner.addEventListener("click", () => {
+		console.log("inner");
+	});
+	//点击inner的打印结果
+	// inner
+	// outer
+	//以上代码，因为inner在里层，因为默认模式是冒泡，里层先触发，所以先打印inner，后打印outer
+</script>

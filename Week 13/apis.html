@@ -1,0 +1,84 @@
+<script>
+	let names = Object.getOwnPropertyNames(window);
+
+	/* ECMA 262 */
+	{
+		let js = new Set();
+		let objects = [];
+		objects.forEach((o) => js.add(o));
+		names = names.filter((e) => !js.has(e));
+	}
+
+	/* subClass of Node */
+	names = names
+		.filter((e) => {
+			try {
+				return !window[e].prototype instanceof Node;
+			} catch (err) {
+				return true;
+			}
+		})
+		.filter((e) => e !== "Node");
+
+	/* events */
+	names = names.filter((e) => !e.match(/^on/));
+
+	/*webkit private*/
+	names = names.filter((e) => !e.match(/^webkit/));
+
+	// https://html.spec.whatwg.org/#window
+	{
+		let names = Object.getOwnPropertyNames(window);
+		let js = new Set();
+		let objects = ["BigInt", "BigInt64Array"]; //.....
+		objects.forEach((o) => js.add(o));
+		names = names.filter((e) => !js.has(e));
+		names = names
+			.filter((e) => {
+				try {
+					return !window[e].prototype instanceof Node;
+				} catch (err) {
+					return true;
+				}
+			})
+			.filter((e) => e !== "Node");
+
+		let windowProps = new Set();
+		objects = ["window", "self", "document", "name", "location", "history", "customElements"]; //...
+		objects.forEach((o) => windowProps.add(o));
+		names = names.filter((e) => !windowProps.has(e));
+	}
+
+	// https://html.spec.whatwg.org/
+
+	{
+		let interfaces = new Set();
+		objects = ["Application", "AudioTrack"]; //....
+		objects.forEach((o) => interfaces.add(o));
+		names = names.filter((e) => !interfaces.has(e));
+	}
+
+	// http://www.ecma-international.org/ecma-402/5.0/index.html#Title
+	names = names.filter((e) => e !== "Intl");
+
+	// https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15
+	names = filterOut(names, ["WebGLVertexArrayObject", "WebGLTransformFeedback", "WebGLSync"]); //....
+
+	//https://www.w3.org/TR/webaudio/
+	names = filterOut(names, ["AudioContext", "AudioNode"]); //....
+
+	//https://encoding.spec.whatwg.org/#dom-textencoder
+	names = filterOut(names, [
+		"TextDecoder",
+		"TextEncoder",
+		"TextDecoderStream",
+		"TextEncoderStream",
+	]);
+
+	//https://streams.spec.whatwg.org/#blqs-class
+	names = filterOut(names, ["ReadableStream", "ReadaleStreamDefaultReader", ""]); //...
+
+	//https://wicg.github.io/BackgroundSync/spec/#sync-manager-interface
+	names = filterOut(names, ["SyncManager"]);
+	console.log(names);
+</script>

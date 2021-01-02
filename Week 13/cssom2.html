@@ -1,0 +1,17 @@
+<style title="hello">
+	a::before {
+		color: red;
+		content: "hello";
+	}
+	div {
+		margin: 30px;
+	}
+</style>
+<link rel="stylesheet" title="x" href="data:text/css,p%7Bcolor:blue;P%7D" />
+<a> world</a>
+<div>test word</div>
+<script>
+	document.styleSheets[0].cssRules[0].style.color = "lightgreen";
+	//1. 可以通过cssRules下标访问对应style
+	//2. 也可以通过循环cssRules判断rule里面的selectorText来判断是否是需要修改的对象
+</script>

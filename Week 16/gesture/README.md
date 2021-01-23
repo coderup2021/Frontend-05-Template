@@ -1,7 +1,0 @@
-```
-npm install
-```
-
-```
-npm start
-```

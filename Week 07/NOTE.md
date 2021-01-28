@@ -352,7 +352,7 @@ void function(){
         var a;
     }
 }()
-console.log(a)	//1
+console.log(a)	//2
 
 //var的作用域 在 var所在的function body内
 ```
@@ -362,10 +362,10 @@ var a = 2;
 void function(){
     a=1;
     {
-        const a;
+        const a=5;
     }
 }()
-console.log(a)	//2
+console.log(a)	//1
 
 //const的作用域在 const所在的花括号
 ```

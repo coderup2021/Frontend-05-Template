@@ -1,0 +1,1 @@
+{"processes":{"1bd6fc1c-4cf5-43b9-93f7-bb1473db8251":{"parent":"b5edc66f-3661-4a28-a9fd-f42777689aaa","children":[]},"b5edc66f-3661-4a28-a9fd-f42777689aaa":{"parent":null,"children":["1bd6fc1c-4cf5-43b9-93f7-bb1473db8251"]}},"files":{"/home/lj/3linuxStudy/0note/Frontend-05-Template/Week 18/mocha-demo-es6-nyc/index.js":["1bd6fc1c-4cf5-43b9-93f7-bb1473db8251"]},"externalIds":{}}

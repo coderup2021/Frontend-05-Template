@@ -1,0 +1,14 @@
+{
+	"name": "generator-toytool",
+	"version": "1.0.0",
+	"main": "generators/app/index.js",
+	"license": "MIT",
+	"dependencies": {
+		"vue": "^2.6.12",
+		"yeoman-generator": "^4.12.0"
+	},
+	"devDependencies": {
+		"vue-loader": "^15.9.6",
+		"webpack": "^5.17.0"
+	}
+}

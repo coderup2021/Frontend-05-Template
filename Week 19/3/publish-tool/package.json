@@ -1,0 +1,12 @@
+{
+	"name": "publish-tool",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"pub": "node ./publish.js"
+	},
+	"dependencies": {
+		"archiver": "^5.2.0"
+	}
+}

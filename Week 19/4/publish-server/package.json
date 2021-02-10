@@ -1,0 +1,14 @@
+{
+	"name": "publish-server",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"publish": "发布该server的命令，一般使用scp命令远程拷贝",
+		"start": "node ./server.js",
+		"test": "yarn test"
+	},
+	"dependencies": {
+		"unzipper": "^0.10.11"
+	}
+}

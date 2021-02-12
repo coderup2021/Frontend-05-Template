@@ -24,6 +24,6 @@ const archive = archiver("zip", {
 	zlib: { level: 9 },
 });
 
-archive.directory("./sample");
+archive.directory("./sample", false);
 archive.finalize();
 archive.pipe(request); //将archive流输出pipe重定向到request流

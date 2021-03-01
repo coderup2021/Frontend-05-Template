@@ -172,7 +172,7 @@ function exec(name) {//将child_process.exec转为promise形式
 });
 ```
 
-# 屋头浏览器headless基本用法 环境wsl-ubuntu18.04
+# 无头浏览器headless基本用法 环境wsl-ubuntu18.04
 1. wsl中安装chromium-browser
 2. windows环境中安装 xlaunch并启动
 3. 执行chromium-browser --headless命令， 如果遇到" socket /var/run/dbus/system_bus_socket: No such file or directory"错误如下图：
@@ -189,7 +189,7 @@ chromium-browser --headless --dump-dom about:blank
 以上命令会得到如下结果：
 ![p7][p7]
 
-# 使用puppeteer屋头浏览器的api插件访问dom
+# 使用puppeteer无头浏览器的api插件访问dom
 1. 初始化项目并安装puppeteer
 ```shell
 mkdir headless-demo

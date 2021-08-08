@@ -46,9 +46,9 @@ element.addEventListener("touchcancel", (event) => {
 
 let handler;
 let startX, startY;
-let isTap = true;
-let isPan = false;
-let isPress = false;
+let isTap = true; //点击
+let isPan = false; //移动
+let isPress = false; //长按
 
 const start = (point) => {
 	//为什么这里， start会触发两次 ????????

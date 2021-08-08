@@ -16,6 +16,7 @@ touch generators/app/index.js
 ```
 
 4. 编写generators/app/index.js文件
+
 ```js
 var Generator = require("yeoman-generator");
 

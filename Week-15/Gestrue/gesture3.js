@@ -5,6 +5,7 @@
  */
 
 let element = document.documentElement;
+let contexts = new Map(); //移动端 创建map保存上下文
 
 element.addEventListener("mousedown", (event) => {
 	let context = Object.create(null);
@@ -45,7 +46,6 @@ element.addEventListener("mousedown", (event) => {
 	document.addEventListener("mouseup", mouseup);
 });
 
-let contexts = new Map(); //移动端 创建map保存上下文
 element.addEventListener("touchstart", (event) => {
 	for (const touch of event.changedTouches) {
 		//开始事件中创建上下文
@@ -81,7 +81,7 @@ element.addEventListener("touchcancel", (event) => {
 });
 
 const start = (point, context) => {
-	//为什么这里， start会触发两次 ????????
+	//为什么这里， start会触发两次 ????????  答案见问题.md
 	console.log("start", point.clientX, point.clientY);
 	context.startX = point.clientX;
 	context.startY = point.clientY;

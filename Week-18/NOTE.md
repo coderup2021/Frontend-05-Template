@@ -1,9 +1,12 @@
 # 如何使用mocha进行单元测试
 1. 安装mocha   https://mochajs.org/#installation
+
 ```shell
 yarn add mocha -D
 ```
+
 2. 编写测试文件
+
 ```js
 const assert = require("assert");
 var add = require("../index").add;
@@ -17,10 +20,13 @@ describe("add function test", function () {
 	});
 });
 ```
+
 3. 运行测试命令
+
 ```shell
 npx mocha
 ```
+
 4. 得到运行结果
 ![p1][p1]
 
@@ -29,22 +35,29 @@ npx mocha
 # 利用babel让mocha支持es6模块加载
 1. 安装@babel/core, @babel/preset-env 和 @babel/register
 https://babeljs.io/docs/en/babel-register#docsNav
+
 ```shell
 yarn add @babel/core @babel/register @babel/preset-env -D
 ```
+
 2. 添加.babelrc文件, 文件内容如下
+
 ```json
 {
 	"presets":["@babel/preset-env"]
 }
 ```
+
 3. 改造被测试的js代码为es6模式
+
 ```js
 export function add(a, b) {
 	return a + b;
 }
 ```
+
 4. 改造测试代码为es6模式
+
 ```js
 const assert = require("assert");
 import { add } from "../index";
@@ -58,13 +71,17 @@ describe("add function test", function () {
 	});
 });
 ```
+
 5.运行mocha命令测试,
+
 ```shell
 npx mocha --require @babel/register
 ```
+
 得到相同结果
 ![p1][p1]
 6.将测试命令改为script写入package.json
+
 ```json
 //package.json
 {
@@ -83,15 +100,19 @@ npx mocha --require @babel/register
 	}
 }
 ```
+
 然后运行yarn test 可以得到相同的结果
 
 # 在上面es6模块基础上,添加code coverage (测试覆盖率)
 	nyc:   https://www.npmjs.com/package/nyc
 1. 安装nyc
+
 ```shell
 yarn add -D nyc
 ```
+
 2. 为了测试nyc, 多加一个需要测试的方法
+
 ```js
 export function add(a, b) {
 	return a + b;
@@ -100,8 +121,10 @@ export function add(a, b) {
 export function mul(a, b) {
 	return a * b;
 }
+
 ```
 3. 添加测试describe
+
 ```js
 const assert = require("assert");
 import { add, mul } from "../index";
@@ -124,31 +147,41 @@ describe("mul function test", function () {
 	});
 });
 ```
+
 运行npx nyc yarn test:
 ![p2][p2]
 目测已经ok，以及可以支持es6模块的语法。但是视频中讲需要使用额外的插件才能支持es6, 可能是版本的差异吧，这里还是记录下插件的用法。
 1. 安装 babel-plugin-istanbul 
+
 ```shell
 yarn add -D babel-plugin-istanbul 
 ```
+
 2. babel-plugin-istanbul  添加到.babelrc
+
 ```json
 {
 	"presets":["@babel/preset-env"],
 	"plugins":["istanbul"]
 }
+
 ```
 3. 安装 @istanbuljs/nyc-config-typescript
+
 ```shell
 yarn add -D @istanbuljs/nyc-config-typescript
 ```
+
 4. 新建.nycrc，并添加@istanbuljs/nyc-config-typescrip
+
 ```json
 {
   "extends": "@istanbuljs/nyc-config-typescript"
 }
 ```
+
 5. 在package.json里面添加scripts, "coverage"
+
 ```json
 {
 	"name": "test-demo",
@@ -170,6 +203,7 @@ yarn add -D @istanbuljs/nyc-config-typescript
 	}
 }
 ```
+
 运行yarn coverage
 ![p2][p2]
 可以看到得到了和上面一样的结果
@@ -182,6 +216,7 @@ yarn add -D @istanbuljs/nyc-config-typescript
 ![p4][p4]
 ![p5][p5]
 2. 给launch.json添加参数如下
+
 ```json
 {
     // 使用 IntelliSense 了解相关属性。 
@@ -208,9 +243,11 @@ yarn add -D @istanbuljs/nyc-config-typescript
     ]
 }
 ```
+
 然后可能就可以启动调试了。
 下面在给他配上sourceMap，以免断点调试出问题
 3. 在.babelrc中加上 sourceMap=inline
+
 ```json
 {
 	"presets": [
@@ -222,7 +259,9 @@ yarn add -D @istanbuljs/nyc-config-typescript
 	"sourceMap": "inline"
 }
 ```
+
 4. 在launch.json中加入sourceMaps=true
+
 ```json
 {
     "version": "0.2.0",

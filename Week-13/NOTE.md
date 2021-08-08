@@ -9,13 +9,14 @@
 ### XML Namespace (还有另外两种namespace: MathML和SVG)
 	* http://www.w3.org/1999/xhtml
 ### DTD中需要记住的一些特殊符号
-	* <!ENTITY nbsp       "&#160;">  //不推荐使用，如果需要显示空格，推荐使用css的white-space控制
-	* <!ENTITY lambda     "&#955;">
-	* <!ENTITY quot       "&#34;">
-	* <!ENTITY amp        "&#38;&38;">
-	* <!ENTITY lt         "&#38;&60;">
-	* <!ENTITY gt         "&#62;">
-	* <!ENTITY apos       "&#39;">
+	* <!ENTITY &nbsp;       "&#160;">  //不推荐使用，如果需要显示空格，推荐使用css的white-space控制
+	* ENTITY &nbsp;       "&#160;"  //不推荐使用，如果需要显示空格，推荐使用css的white-space控制
+	* ENTITY &lambda;     "&#955;"  //λ
+	* ENTITY &quot;       "&#34;"   //"
+	* ENTITY &amp;        "&#38;"   //&
+	* ENTITY &lt;         "&#60;"   //<
+	* ENTITY &gt;         "&#62;"   //>
+	* ENTITY &apos;       "&#39;"   //'
 
 ## HTML标签语义
 * aside 不是最重要的一些内容，比如目录之内的

@@ -11,17 +11,20 @@ let tick=()=>{
 }
 ```
 
-3. requestAnimationFrame :  现代浏览器推荐用法, 因为它完全根据浏览器的刷新频率来执行， 不需要使用16ms的延迟，
+3. requestAnimationFrame :  现代浏览器推荐用法, 因为它完全根据浏览器的刷新频率来执行， 不需要使用16ms的延迟.
+
 ```js
+
 let tick=()=>{
 	requestAnimationFrame(tick)
 }
 
-
 //cancelAnimationFrame
 let handler = requestAnimationFrame(tick)
 cancelAnimationFrame(handler)
+
 ```
+
 ## 动画的分类
 1. 属性动画： 通过修改dom对象的属性，让浏览器重新渲染产生的动画。
 2. 帧动画： 手动绘制页面的每一帧，形成的动画。
@@ -30,6 +33,7 @@ cancelAnimationFrame(handler)
 ![p1][p1]
 
 ## 统一手势和鼠标的处理接口代码
+
 ```js
 let element = document.documentElement;
 
